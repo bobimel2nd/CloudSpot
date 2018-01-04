@@ -1,12 +1,9 @@
 var InitTestDone = false;
 
 function InitializeTest() {
-	if (!InitTestDone) TestInitialize();
-}
+	if (InitTestDone) return;
 
-function TestInitialize() {
-	if (PlayList.length === 0) return;
-	DisplayPlaylist(0);
+	if (PlayList.length > 0) DisplayPlaylist(0);
 	$("button").removeAttr("disabled");
 	InitTestDone = true;
 
@@ -52,16 +49,16 @@ function TestInitialize() {
 
 function WaitForList(idx) {
     var poller1 = setInterval(function(){
-        if(idx < PlayList.length) return;
+        if(idx >= PlayList.length) return;
         clearInterval(poller1);
     },100);
 }
 
 function DisplayPlaylist(idx) {
-	if (PlayList.length === 0) return;
+	if ((PlayList.length-1) < idx) return;
 	if (idx === -1) idx = 0;
 	WaitForList(idx);
-	ListStruct = PlayList[idx];
+	ListStruct = cloneJSON(PlayList[idx]);
 	$("#PlaylistName").text(ListStruct.Name);
 	$("#Playlist").text("");
 	if (ListStruct.Songs !== Empty)	{
