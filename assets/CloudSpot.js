@@ -34,7 +34,10 @@ function InitializeTest() {
 			return;
 		}
 		FirebaseDelList(Name);
-		if (PlayList.length > 0) $("#allPlaylists").val(PlayList[0].Name).change();
+		if (PlayList.length > 0)
+			$("#allPlaylists").val(PlayList[0].Name).change();
+		else
+			;
 	});
 
 	$("#addSong").on("click", function () {
@@ -108,9 +111,13 @@ function WaitForList(idx) {
 function displayPlaylistSongs(Name) {
 	var idx = whichList(Name);
 	if ((PlayList.length-1) < idx) return;
-	if (idx === -1) idx = 0;
-	WaitForList(idx);
-	ListStruct = cloneJSON(PlayList[idx]);
+	if (idx === -1) {
+		ListStruct = cloneJSON(cLists);
+		ListStruct.Songs = Empty;
+	} else {
+		WaitForList(idx);
+		ListStruct = cloneJSON(PlayList[idx]);
+	}
 	$("#PlaylistName").text(ListStruct.Name);
 	$("#bodyPlaylist").html("");
 	if (ListStruct.Songs !== Empty)	{
@@ -145,6 +152,7 @@ function displayPlaylistSongs(Name) {
 
 function displayPlaylists(idx) {
 	$("#allPlaylists").html("");
+	if (PlayList.length === 0) displayPlaylistSongs(null)
 	for (var i=0; i<PlayList.length; i++) {
 		$("#allPlaylists").append($("<option/>", {
 		    value: PlayList[i].Name,
