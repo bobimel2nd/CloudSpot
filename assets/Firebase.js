@@ -11,9 +11,10 @@ var database;
 var Key;
 
 var Empty = "Empty";
-var cSongs = {	"Album":"", 
+var cSongs = {	"Title":"", 
 				"Artist":"", 
-				"Title":"", 
+				"Album":"",
+				"Track":"", 
 				"Duration":0};
 var cLists = {	"Name": "",
 				"Songs": []};
@@ -60,6 +61,7 @@ function Initialize() {
 			if (ListStruct.Songs === Empty) ListStruct.Songs = [];
 			PlayList.push(cloneJSON(ListStruct));
 			PlayKeys.push(playlistSnapshot.key);
+			displayPlaylists();
 		}
 	}, function(errorObject) {
 		alert("The read failed: " + errorObject.code);
@@ -74,6 +76,7 @@ function Initialize() {
 			if (ListStruct.Songs === Empty) ListStruct.Songs = [];
 			var idx = whichList(ListStruct.Name);
 			PlayList[idx] = cloneJSON(ListStruct);
+			displayPlaylistSongs(PlayList[idx].Name);
 		}
 	}, function(errorObject) {
 		alert("The read failed: " + errorObject.code);
@@ -87,6 +90,7 @@ function Initialize() {
 			var idx = whichList(ListStruct.Name);
 			PlayList.splice(idx,1);
 			PlayKeys.splice(idx,1);
+			displayPlaylists();
 		}
 	}, function(errorObject) {
 		alert("The read failed: " + errorObject.code);
@@ -133,7 +137,7 @@ function FirebaseAddList(ListName) {
 	return idx;
 }
 
-function FirebaseAddSong(ListName, Album, Artist, Title, Duration) {
+function FirebaseAddSong(ListName, Title, Artist, Album, Track, Duration) {
 	// Find the Playlist the user want to add to
 	var idx = whichList(ListName);
 	if (idx === -1) {
@@ -148,9 +152,10 @@ function FirebaseAddSong(ListName, Album, Artist, Title, Duration) {
 	}
 	// Add the Song to Array
 	SongStruct = cloneJSON(cSongs);
-	SongStruct.Album = Album;
-	SongStruct.Artist = Artist;
 	SongStruct.Title = Title;
+	SongStruct.Artist = Artist;
+	SongStruct.Album = Album;
+	SongStruct.Track = Track;
 	SongStruct.Duration = Duration;
 	ListStruct = cloneJSON(PlayList[idx]);
 	ListStruct.Songs.push(SongStruct);
@@ -199,7 +204,6 @@ function FirebasePrvList(ListName) {
 	return idx;	
 }
 
-/*
 function FirebaseGetList(ListName) {
 	// Find Requested Playlist
 	var idx = PlayList.findIndex(Itm => Itm.Name === ListName);
@@ -209,5 +213,3 @@ function FirebaseGetList(ListName) {
 	}
 	return PlayList[idx].Songs;
 }
-
- */
