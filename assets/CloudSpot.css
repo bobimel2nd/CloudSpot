@@ -1,0 +1,85 @@
+body {
+    background-image: url("./straws.png");
+    background-repeat: repeat;
+    background-color: #cccccc;
+    font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 16px;
+    color: black;
+}
+
+table.scroll {
+    width: 100%;
+    border-spacing: 0;
+    border: 1px solid black;
+}
+
+table.scroll th,
+table.scroll td,
+table.scroll tr,
+table.scroll thead,
+table.scroll tbody { display: block; }
+
+table.scroll thead tr {
+    width: 100%;
+}
+
+table.scroll tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+table.scroll tbody {
+    height: 360px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+table.scroll-sm tbody {
+    height: 240px;
+}
+
+table.scroll tbody td,
+table.scroll thead th {
+    width: 19%;
+    float: left;
+}
+
+table.scroll tbody tr:hover {
+    background-color: #ccc;
+}
+
+thead tr th { 
+    height: 30px;
+    line-height: 30px;
+    text-align: left;
+}
+
+tbody { 
+    border-top: 1px solid black;
+}
+
+tbody td:last-child, thead th:last-child {
+    border-right: none !important;
+}
+
+select option {
+    box-shadow: inset 20px 20px white;
+}
+
+select option:checked {
+    box-shadow: inset 20px 20px lightblue;
+} 
+
+select option:hover {
+    box-shadow: inset 20px 20px lightgrey;
+}
+
+.high-light {
+    background: lightblue !important;
+}
+
+.panel-body a {
+    word-break: break-all;
+}

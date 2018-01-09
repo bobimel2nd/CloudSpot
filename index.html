@@ -4,105 +4,22 @@
   <meta charset="UTF-8">
   <title>CloudSpot</title>
 
+  <link rel="icon" href="./assets/CloudSpot.png">
   <!-- Bootswatch Styling for Improving the Aesthetics -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
-
   <!-- Font Awesome CSS Icons (For cool glyphicons) -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="./assets/popup.css">
+  <link rel="stylesheet" href="./assets/CloudSpot.css">
 
   <!-- jQuery JS -->
   <script src="https://code.jquery.com/jquery.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.7.0/firebase.js"></script>
   <!-- Code to the JavaScript File -->
+  <script src="./assets/popup.js"></script>
   <script src="./assets/Firebase.js"></script>
   <script src="./assets/CloudSpot.js"></script>
-  <script type="text/javascript" src="./assets/popup.js"></script>
-
-  <!-- Style to fix the issue of text extending past panel length -->
-  <style>
-    body {
-        background-image: url("./assets/straws.png");
-        background-repeat: repeat;
-        background-color: #cccccc;
-        font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
-        font-size: 16px;
-        color: black;
-    }
-    
-    table.scroll {
-        width: 100%;
-        border-spacing: 0;
-        border: 1px solid black;
-    }
-
-    table.scroll th,
-    table.scroll td,
-    table.scroll tr,
-    table.scroll thead,
-    table.scroll tbody { display: block; }
-
-    table.scroll thead tr {
-        width: 100%;
-    }
-
-    table.scroll tr:after {
-        content: ' ';
-        display: block;
-        visibility: hidden;
-        clear: both;
-    }
-
-    table.scroll tbody {
-        height: 360px;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-
-    table.scroll tbody td,
-    table.scroll thead th {
-        width: 19%;
-        float: left;
-    }
-
-    table.scroll tbody tr:hover {
-        background-color: #ccc;
-    }
-
-    thead tr th { 
-        height: 30px;
-        line-height: 30px;
-        text-align: left;
-    }
-
-    tbody { 
-        border-top: 1px solid black;
-    }
-
-    tbody td:last-child, thead th:last-child {
-        border-right: none !important;
-    }
-
-    select option {
-        box-shadow: inset 20px 20px white;
-    }
-
-    select option:checked {
-        box-shadow: inset 20px 20px lightblue;
-    } 
-
-    select option:hover {
-        box-shadow: inset 20px 20px lightgrey;
-    }
-
-    .high-light {
-        background: lightblue !important;
-    }
-
-    .panel-body a {
-        word-break: break-all;
-    }
-  </style>
+  <script src="./assets/PlexAPI.js"></script>
 </head>
 <body>
   <!-- Main Bootstrap Search -->
@@ -111,19 +28,17 @@
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h3 class="text-center">
-          <strong>CloudSpot&nbsp;&nbsp;&nbsp;
-          <i id="helpShort" class="fa fa-info-circle" aria-hidden="true"></i>
-          <i id="helpLong" class="fa fa-question-circle" aria-hidden="true"></i>
-          </strong>
+          <img src="./assets/CloudSpot.png" alt="CloudSpot" height="50">
+          <strong>&nbsp;&nbsp;&nbsp;CloudSpot</strong>
         </h3>
       </div>
     </div>
     <!-- This row will handle all of the retrieved Data -->
-    <div class="row"><strong>
+    <div class="row">
       <div class="col-sm-4">
         <div class="panel panel-primary">
           <div class="panel-heading">
-            <h3 class="panel-title text-center"><i class="fa">Pick a Playlist</i></h3>
+            <h3 class="panel-title text-center"><strong><i class="fa">Pick a Playlist</i></strong></h3>
           </div>
           <div class="panel-body text-center">
             <div class="row">
@@ -184,21 +99,94 @@
     </div>
   </div>
   <!-- Pop up window for Detailed Information -->
-  <div class="popup" data-popup="getPlaylist">
+  <div class="popup" data-popup="Spotify">
     <div class="popup-inner">
-      <select id="allPlaylists">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-      </select>
-      <a class="popup-close" data-popup-close="getPlaylist" href="#">X</a>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="text-center">
+            <img src="./assets/CloudSpot.png" alt="CloudSpot" height="50">
+            <strong>CloudSpot</strong>
+          </h3>
+        </div>
+      </div>
+      <div class="panel-body text-center">
+        <div class="row">
+          <div class="col-lg-12">
+            <table class="scroll scroll-sm">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Artist</th>
+                  <th>Album</th>
+                  <th>Track</th>
+                  <th>Duration</th>
+                </tr>
+              </thead>
+              <tbody id="bodySpotify">
+                <tr></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+          <div class="col-sm-offset-2 col-sm-4">
+            <img id="sptOks" src="./assets/oks.png" alt="OK" style="width: 100%"></div>
+          <div class="col-sm-4">
+            <img id="sptCan" src="./assets/can.png" alt="Cancel" style="width: 100%"></div>
+        </div>
+      </div>
     </div>
   </div>
-  <!-- Pop up window for Detailed Information -->
-  <div class="popup" data-popup="moviePopup">
+  <!-- Pop up window for YesNo Questions -->
+  <div class="popup" data-popup="YesNo">
     <div class="popup-inner">
-      <a class="popup-close" data-popup-close="moviePopup" href="#">X</a>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="text-center">
+            <img src="./assets/CloudSpot.png" alt="CloudSpot" height="50">
+            <strong>CloudSpot</strong>
+          </h3>
+        </div>
+      </div>
+      <div class="panel-body text-center">
+        <div class="row" id="YesNoContent">
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+          <div class="col-sm-offset-2 col-sm-4">
+            <img id="ansYes" src="./assets/yes.png" alt="Yes" style="width: 100%"></div>
+          <div class="col-sm-4">
+            <img id="ansNeg" src="./assets/neg.png" alt="No" style="width: 100%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Pop up window for Prompt Questions -->
+  <div class="popup" data-popup="Prompt">
+    <div class="popup-inner">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="text-center">
+            <img src="./assets/CloudSpot.png" alt="CloudSpot" height="50">
+            <strong>CloudSpot</strong>
+          </h3>
+        </div>
+      </div>
+      <div class="panel-body text-center">
+        <div class="row" id="PromptContent">
+        </div>
+        <div class="row">
+          <input id="PromptBox" type="text">
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+          <div class="col-sm-offset-2 col-sm-4">
+            <img id="ansOks" src="./assets/oks.png" alt="OK" style="width: 100%"></div>
+          <div class="col-sm-4">
+            <img id="ansCan" src="./assets/can.png" alt="Cancel" style="width: 100%"></div>
+        </div>
+      </div>
     </div>
   </div>
 </body>

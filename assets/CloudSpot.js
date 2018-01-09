@@ -1,4 +1,5 @@
 var InitTestDone = false;
+var gPass = "";
 
 function InitializeTest() {
 	if (InitTestDone) return;
@@ -12,60 +13,37 @@ function InitializeTest() {
 	});
 
 	$("#addList").on("click", function() {
-		var Cnt = PlayList.length+1;
-		var Name = prompt("Enter Name of Playlist", "Playlist " + Cnt);
-		if (Name === null) {
-			alert("List Addition Cancelled - User Request");
-			return;
-		}
-		var idx = whichList(Name);
-		if (idx !== -1) {
-			alert("List Addition Cancelled - Already Exists");
-			return;
-		}
-		FirebaseAddList(Name);
-		$("#allPlaylists").val(Name).change();
+		popupPrompt("Enter Name of New List ", function() {
+			var Name = gPass;
+			if (Name === null) return;
+			var idx = whichList(Name);
+			if (idx !== -1) {
+				alert("List Addition Cancelled - Already Exists");
+				return;
+			}
+			FirebaseAddList(Name);
+			$("#allPlaylists").val(Name).change();
+		}, null);
 	});
 
 	$("#delList").on("click", function() {
-		var Name = prompt("Enter Name of Playlist", $("#PlaylistName").text());
+		var Name = $("#PlaylistName").text();
 		if (Name === null) {
 			alert("List Deletion Cancelled - User Request");
 			return;
 		}
-		FirebaseDelList(Name);
-		if (PlayList.length > 0)
-			$("#allPlaylists").val(PlayList[0].Name).change();
-		else
-			;
+		popupYesNo("Really Delete List \"" + Name + "\"", function() {
+			var Name = $("#PlaylistName").text();
+			FirebaseDelList(Name);
+			if (PlayList.length > 0)
+				$("#allPlaylists").val(PlayList[0].Name).change();
+		}, null);
 	});
 
 	$("#addSong").on("click", function () {
-		var Name = $("#PlaylistName").text();
-		var idx = whichList(Name);
-		var Cnt = PlayList[idx].Songs.length+1;
-
-		Cnt = prompt("Title", Cnt);
-		if (Cnt === null) {
-			alert("Song Addition Cancelled - User Request")
-			return;
-		}
-
-		var Title = "Title " + Cnt;
-		var Artist = "Artist " + Cnt;
-		var Album = "Album " + Cnt;
-		var Track = 0;
-		var Duration = 0;
-		if ($.isNumeric(Cnt)) {
-			Track = Cnt;
-			Duration = Cnt;
-		}
-
-		if (whichSong(idx, Title) !== -1) {
-			alert("Song Addition Cancelled - Already Exists")
-			return;
-		}
-		FirebaseAddSong(Name, Title, Artist, Album, Track, Duration);
+		popupPrompt("Enter Search Criteria", function() {
+			plexSearch(gPass);
+		}, null);
 	});
 
 	$("#delSong").on("click", function () {
@@ -76,12 +54,12 @@ function InitializeTest() {
 			alert("Nothing to Delete - No Song Selected");
 			return;	
 		}
-		var Title = prompt("Title", PlayList[idx].Songs[sng].Title);
-		if (Title === null) {
-			alert("Song Deletion Cancelled - User Request")
-			return;
-		}
-		FirebaseDelSong($("#PlaylistName").text(), Title);
+		popupYesNo("Really Delete Song \""  + PlayList[idx].Songs[sng].Title + "\"", function() {
+			var Name = $("#PlaylistName").text();
+			var idx = whichList(Name);
+			var sng = $("#bodyPlaylist tr.high-light").index();
+			FirebaseDelSong(Name, PlayList[idx].Songs[sng].Title);
+		}, null);
 	});
 
 	$("#plySong").on("click", function () {
@@ -104,6 +82,13 @@ function InitializeTest() {
 function WaitForList(idx) {
     var poller1 = setInterval(function(){
         if(idx >= PlayList.length) return;
+        clearInterval(poller1);
+    },100);
+}
+
+function WaitForSearch(idx) {
+    var poller1 = setInterval(function(){
+        if(gSearch) return;
         clearInterval(poller1);
     },100);
 }
@@ -160,3 +145,22 @@ function displayPlaylists(idx) {
 		}));
 	}	
 }
+
+function SpotifySearch(Srch) {
+	var Songs = [];
+
+	for(i=1; i<PickInteger(1,21); i++) {
+		var SongStruct = cloneJSON(cSongs);
+		SongStruct.Title = Srch + " " + i; 
+		SongStruct.Artist = "Artist " + i; 
+		SongStruct.Album = "Album " + i; 
+		SongStruct.Track = i; 
+		SongStruct.Duration = i;
+		Songs.push(SongStruct); 
+	}
+	return Songs;
+}
+
+function PickInteger(Low, High) {
+	return Math.floor(Math.random()*(High-Low+1) + Low);
+};
