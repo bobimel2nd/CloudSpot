@@ -21,6 +21,7 @@ function plexSearch(title) {
     var All = response.MediaContainer.Metadata;
     for (var i=0; i<All.length; i++) {
       var ListStruct = cloneJSON(cLists);
+      ListStruct.MediaID = All[i].key;
       ListStruct.Title = All[i].title;
       ListStruct.Album = All[i].parentTitle;
       ListStruct.Artist = All[i].grandparentTitle;
@@ -31,12 +32,14 @@ function plexSearch(title) {
     popupSpotify(Results, function() {
       var Name = $("#PlaylistName").text();
       $("#bodySpotify tr.high-light").each(function() {
-        var Title = $(this).find("td").eq(0).text();
-        var Artist = $(this).find("td").eq(1).text();
-        var Album = $(this).find("td").eq(2).text();
-        var Track = $(this).find("td").eq(3).text();
-        var Duration = $(this).find("td").eq(4).text();
-        FirebaseAddSong(Name, Title, Artist, Album, Track, Duration);
+        idx = $(this).index();
+        var MediaID = Results[idx].MediaID;
+        var Title = Results[idx].Title;
+        var Artist = Results[idx].Artist;
+        var Album = Results[idx].Album;
+        var Track = Results[idx].Track;
+        var Duration = Results[idx].Duration;
+        FirebaseAddSong(Name, MediaID, Title, Artist, Album, Track, Duration);
       });
     }, null);
   })

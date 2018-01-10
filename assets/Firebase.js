@@ -11,7 +11,8 @@ var database;
 var Key;
 
 var Empty = "Empty";
-var cSongs = {	"Title":"", 
+var cSongs = {	"MediaID":"",
+				"Title":"", 
 				"Artist":"", 
 				"Album":"",
 				"Track":"", 
@@ -137,7 +138,7 @@ function FirebaseAddList(ListName) {
 	return idx;
 }
 
-function FirebaseAddSong(ListName, Title, Artist, Album, Track, Duration) {
+function FirebaseAddSong(ListName, MediaID, Title, Artist, Album, Track, Duration) {
 	// Find the Playlist the user want to add to
 	var idx = whichList(ListName);
 	if (idx === -1) {
@@ -152,6 +153,7 @@ function FirebaseAddSong(ListName, Title, Artist, Album, Track, Duration) {
 	}
 	// Add the Song to Array
 	SongStruct = cloneJSON(cSongs);
+	SongStruct.MediaID = MediaID;
 	SongStruct.Title = Title;
 	SongStruct.Artist = Artist;
 	SongStruct.Album = Album;

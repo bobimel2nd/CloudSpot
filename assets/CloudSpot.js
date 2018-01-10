@@ -151,6 +151,7 @@ function SpotifySearch(Srch) {
 
 	for(i=1; i<PickInteger(1,21); i++) {
 		var SongStruct = cloneJSON(cSongs);
+		SongStruct.MediaID = "Key " + i;
 		SongStruct.Title = Srch + " " + i; 
 		SongStruct.Artist = "Artist " + i; 
 		SongStruct.Album = "Album " + i; 
