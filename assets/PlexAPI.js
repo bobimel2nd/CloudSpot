@@ -1,6 +1,6 @@
 //var plexBase = "http://192.168.1.100:32400";
 //var plexBase = "https://68-7-196-55.13320b9ce6a54c899f24afe392bf14e1.plex.direct:32400";
-var plexBase = "https://184-105-148-106.13320b9ce6a54c899f24afe392bf14e1.plex.direct:8443";
+var plexBase = "https://184-105-148-105.13320b9ce6a54c899f24afe392bf14e1.plex.direct:8443";
 var plexCode = "X-Plex-Token=vkqRfaPLgiVgf4nevfyx";
 var gTitle;
 var gResults;
