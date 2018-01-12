@@ -1,12 +1,17 @@
-var InitTestDone = false;
+var InitDone = false;
 var gPass = "";
 
-function InitializeTest() {
-	if (InitTestDone) return;
+$(document).ready(function() {
+	firebaseInitialize();
+	plexInitialize();
+	appInitialize();
+});
+
+
+function appInitialize() {
 
 	if (PlayList.length > 0) displayPlaylists(0);
 	$("button").removeAttr("disabled");
-	InitTestDone = true;
 
 	$("#allPlaylists").on("change", function() {
 		displayPlaylistSongs(this.value);
@@ -21,7 +26,7 @@ function InitializeTest() {
 				alert("List Addition Cancelled - Already Exists");
 				return;
 			}
-			FirebaseAddList(Name);
+			firebaseAddList(Name);
 			$("#allPlaylists").val(Name).change();
 		}, null);
 	});
@@ -34,7 +39,7 @@ function InitializeTest() {
 		}
 		popupYesNo("Really Delete List \"" + Name + "\"", function() {
 			var Name = $("#PlaylistName").text();
-			FirebaseDelList(Name);
+			firebaseDelList(Name);
 			if (PlayList.length > 0)
 				$("#allPlaylists").val(PlayList[0].Name).change();
 		}, null);
@@ -58,7 +63,7 @@ function InitializeTest() {
 			var Name = $("#PlaylistName").text();
 			var idx = whichList(Name);
 			var sng = $("#bodyPlaylist tr.high-light").index();
-			FirebaseDelSong(Name, PlayList[idx].Songs[sng].Title);
+			firebaseDelSong(Name, PlayList[idx].Songs[sng].Title);
 		}, null);
 	});
 

@@ -1,5 +1,5 @@
-// Initialize Firebase
-const FirebaseConfig = {
+// Initialize firebase
+const firebaseConfig = {
 	apiKey: "AIzaSyDDpiQCcpEHqIN_g5jnxiz3OvKgXmEQ4Aw",
 	authDomain: "cloudspot-313a6.firebaseapp.com",
 	databaseURL: "https://cloudspot-313a6.firebaseio.com",
@@ -25,10 +25,6 @@ var ListStruct = cloneJSON(cLists);
 var PlayList = [];
 var PlayKeys = [];
 
-$(document).ready(function() {
-	Initialize();
-});
-
 function cloneJSON(obj) {
     // basic type deep copy
     if (obj === null || obj === undefined || typeof obj !== 'object')  {
@@ -50,8 +46,8 @@ function cloneJSON(obj) {
     return cloneObject;
 }
 
-function Initialize() {
-	firebase.initializeApp(FirebaseConfig);
+function firebaseInitialize() {
+	firebase.initializeApp(firebaseConfig);
 	database = firebase.database();
 
 	// At the initial load, get a snapshot of the current data.
@@ -96,8 +92,6 @@ function Initialize() {
 	}, function(errorObject) {
 		alert("The read failed: " + errorObject.code);
 	});
-
-	InitializeTest();  // Returns if already done
 }
 
 function whichList(ListName) {
@@ -114,13 +108,13 @@ function Notify(text) {
 	console.log(text);
 }
 
-function FirebaseNxtList(ListName) {
+function firebaseNxtList(ListName) {
 	var idx = whichList(ListName);
 	if (idx < PlayKeys.length-1) idx++;
 	return idx;	
 }
 
-function FirebaseAddList(ListName) {
+function firebaseAddList(ListName) {
 	// Check to see if Playlist already exists
 	var idx = whichList(ListName);
 	if (idx !== -1) {
@@ -133,12 +127,12 @@ function FirebaseAddList(ListName) {
 	ListStruct.Name = ListName;
 	ListStruct.Songs = Empty;
 
-	// add this Playlist to Firebase
+	// add this Playlist to firebase
 	database.ref().push(ListStruct);
 	return idx;
 }
 
-function FirebaseAddSong(ListName, MediaID, Title, Artist, Album, Track, Duration) {
+function firebaseAddSong(ListName, MediaID, Title, Artist, Album, Track, Duration) {
 	// Find the Playlist the user want to add to
 	var idx = whichList(ListName);
 	if (idx === -1) {
@@ -166,7 +160,7 @@ function FirebaseAddSong(ListName, MediaID, Title, Artist, Album, Track, Duratio
 	return idx;
 }
 
-function FirebaseDelSong(ListName, Title) {
+function firebaseDelSong(ListName, Title) {
 	// Find the Playlist the user wants to Delete from
 	var idx = whichList(ListName);
 	if (idx === -1) {
@@ -188,7 +182,7 @@ function FirebaseDelSong(ListName, Title) {
 	return idx;
 }
 
-function FirebaseDelList(ListName) {
+function firebaseDelList(ListName) {
 	// Find the Playlist the user wants to Delete from
 	var idx = whichList(ListName);
 	if (idx === -1) {
@@ -200,13 +194,13 @@ function FirebaseDelList(ListName) {
 	return idx;
 }
 
-function FirebasePrvList(ListName) {
+function firebasePrvList(ListName) {
 	var idx = whichList(ListName);
 	if (idx > 0) idx--;
 	return idx;	
 }
 
-function FirebaseGetList(ListName) {
+function firebaseGetList(ListName) {
 	// Find Requested Playlist
 	var idx = PlayList.findIndex(Itm => Itm.Name === ListName);
 	if (idx === -1) {
